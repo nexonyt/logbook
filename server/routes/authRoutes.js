@@ -1,15 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const {test } = require('../controllers/authControllers')
-const cors = require('cors');
+const { test, registerUser,loginUser } = require("../controllers/authController");
+const cors = require("cors");
 
 router.use(
-    cors({
-        credentials: true,
-        origin: 'http://localhost:5173'
-    })
-)
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 
-router.get('/',test)
+router.get("/", test);
+router.post("/register", registerUser);
+router.post('/login',loginUser)
 
-module.exports = router
+module.exports = router;
