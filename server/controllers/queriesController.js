@@ -19,9 +19,7 @@ const addFlightQuery = (req,res) => {
     db.query(
         "SELECT * FROM `flights`",
         (err, result) => {
-          if (err) {
-            throw (err);
-          }
+          if (err) throw (err);
           res.json(result);
         }
       );
