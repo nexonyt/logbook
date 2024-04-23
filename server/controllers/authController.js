@@ -92,4 +92,11 @@ const getProfile = (req, res) => {
     res.json(null);
   }
 };
-module.exports = { test, registerUser, loginUser, getProfile };
+
+const getUserID = (req, res) => {
+  const { userID } = req.cookies;
+  if(userID) {
+    res.json(userID);
+  }
+}
+module.exports = { test, registerUser, loginUser, getProfile,getUserID };
