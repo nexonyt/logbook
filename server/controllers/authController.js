@@ -1,12 +1,13 @@
 const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../helpers/auth");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const test = (req, res) => {
   res.json("It works!");
 };
 
 const registerUser = async (req, res) => {
+  let userID = 1;
   try {
     const { name, email, password } = req.body;
     if (!name) {
@@ -19,13 +20,19 @@ const registerUser = async (req, res) => {
         error: "Password is required and should be at least 6characters long",
       });
     }
-    const exist = await User.findOne({ email });
-    if (exist) {
+    const existEmail = await User.findOne({ email });
+    if (existEmail) {
       return res.json({ error: "E-mail is taken!" });
+    }
+
+    const existUserID = await User.findOne({ userID });
+    if (existUserID) {
+      userID++;
     }
 
     const hashedPassword = await hashPassword(password);
     const user = await User.create({
+      userID,
       name,
       email,
       password: hashedPassword,
@@ -49,10 +56,20 @@ const loginUser = async (req, res) => {
     }
     const match = await comparePassword(password, user.password);
     if (match) {
-      jwt.sign({email: user.email, id:user._id,name: user.name},process.env.JWT_SECRET,{}, (err,token) => {
-        if(err) throw err;
-        res.cookie('token',token),json(user)
-      })
+      jwt.sign(
+        {
+          email: user.email,
+          id: user._id,
+          name: user.name
+        },
+        process.env.JWT_SECRET,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token).json(user);
+        }
+      );
+      res.cookie("userID", user.userID).json(user);
     }
     if (!match) {
       res.json({
@@ -63,4 +80,16 @@ const loginUser = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { test, registerUser, loginUser };
+
+const getProfile = (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+      if (err) throw err;
+      res.json(user);
+    });
+  } else {
+    res.json(null);
+  }
+};
+module.exports = { test, registerUser, loginUser, getProfile };
