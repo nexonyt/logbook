@@ -7,7 +7,7 @@ export default function AddFlight() {
   const [flightData, setFlightData] = useState({
     userID: 0,
     flightNumber: "",
-    flightDepature: "",
+    flightDeparture: "",
     flightArrival: "",
     flightAirline: "",
   });
@@ -19,14 +19,14 @@ export default function AddFlight() {
         setUser(data);
         setDataReceived(true);
       });
-
-      // axios.get("/addflightquery").then(({ data }) => {
-      // });
     }
   }, []);
 
   const sendData = () => {
     console.log(flightData);
+    axios.post("/addflightquery", flightData).then((response) => {
+      console.log(response.data)
+    });
   };
   return (
     <>
@@ -51,7 +51,7 @@ export default function AddFlight() {
               type="datetime-local"
               name="flightDeparture"
               onChange={(e) =>
-                setFlightData({ ...flightData, flightDepature: e.target.value })
+                setFlightData({ ...flightData, flightDeparture: e.target.value })
               }
             />
             <br />
