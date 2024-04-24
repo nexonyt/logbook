@@ -15,5 +15,5 @@ router.get("/", test);
 router.post("/register", registerUser);
 router.post('/login',loginUser)
 router.get('/getuserid',getUserID)
-router.get('/addflightquery',addFlightQuery)
+router.post('/addflightquery',addFlightQuery)
 module.exports = router;
