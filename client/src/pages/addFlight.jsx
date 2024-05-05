@@ -12,6 +12,13 @@ export default function AddFlight() {
     flightDateArrival: "",
     flightTimeArrival: "",
     flightAirline: "",
+    flightDestIATA: "",
+    flightDestICAO: "",
+    flightArrivalIATA: "",
+    flightArrivalICAO: "",
+    fliAircraft: "",
+    fliDelay: 0,
+    flightDuration:""
   });
 
 
@@ -33,7 +40,14 @@ export default function AddFlight() {
       flightNumber: preFlightData.flightNumber,
       flightDeparture: preFlightData.flightDateDeparture + ' ' + preFlightData.flightTimeDeparture + ":00",
       flightArrival: preFlightData.flightDateArrival + ' ' + preFlightData.flightTimeArrival + ":00",
-      flightAirline: preFlightData.flightAirline
+      flightAirline: preFlightData.flightAirline,
+      flightDestIATA:  preFlightData.flightDestIATA,
+      flightDestICAO:  preFlightData.flightDestICAO,
+      flightArrivalIATA:  preFlightData.flightArrivalIATA,
+      flightArrivalICAO:  preFlightData.flightArrivalICAO,
+      fliAircraft:  preFlightData.fliAircraft,
+      fliDelay:  preFlightData.fliDelay,
+      flightDuration: preFlightData.flightDuration
     };
     console.log(flightData);
     axios.post("/addflightquery", flightData).then((response) => {
@@ -68,16 +82,6 @@ export default function AddFlight() {
               }
             />
             <br />
-            Data przylotu:{" "}
-            <input
-              type="text"
-              name="flightDateArrival"
-              placeholder="e.g. 2024-10-10"
-              onChange={(e) =>
-                setPreFlightData({ ...preFlightData, flightDateArrival: e.target.value })
-              }
-            />
-            <br />
             Godzina odlotu:{" "}
             <input
               type="text"
@@ -85,6 +89,16 @@ export default function AddFlight() {
               placeholder="e.g. 10:00"
               onChange={(e) =>
                 setPreFlightData({ ...preFlightData, flightTimeDeparture: e.target.value })
+              }
+            />
+            <br />
+            Data przylotu:{" "}
+            <input
+              type="text"
+              name="flightDateArrival"
+              placeholder="e.g. 2024-10-10"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, flightDateArrival: e.target.value })
               }
             />
             <br />
@@ -97,6 +111,16 @@ export default function AddFlight() {
                 setPreFlightData({ ...preFlightData, flightTimeArrival: e.target.value })
               }
             />
+             <br />
+            Czas lotu:{" "}
+            <input
+              type="text"
+              name="flightDuration"
+              placeholder="e.g. 2:45"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, flightDuration: e.target.value })
+              }
+            />
             <br />
             Linia{" "}
             <input
@@ -106,13 +130,65 @@ export default function AddFlight() {
                 setPreFlightData({ ...preFlightData, flightAirline: e.target.value })
               }
             />
+             <br />
+            Rejestracja samolotu{" "}
+            <input
+              type="text"
+              name="fliAircraft"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, fliAircraft: e.target.value })
+              }
+            />
+             <br />
+            Jakie opóźnienie?{" "}
+            <input
+              type="text"
+              name="fliDelay"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, fliDelay: e.target.value })
+              }
+            />
+            <br />
+            <br />
+            <br />
+            Kod ICAO lotniska odlotu {" "}
+            <input
+              type="text"
+              size="4"
+              name="flightDestICAO"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, flightDestICAO: e.target.value })
+              }
+            />
+            <br />
+
+            Kod IATA lotniska odlotu {" "}
+            <input
+              type="text"
+              size="4"
+              name="flightDestIATA"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, flightDestIATA: e.target.value })
+              }
+            />
             <br />
             Kod ICAO lotniska docelowego {" "}
             <input
               type="text"
-              name="flightAirline"
+              size="4"
+              name="flightArrivalICAO"
               onChange={(e) =>
-                setPreFlightData({ ...preFlightData, flightAirline: e.target.value })
+                setPreFlightData({ ...preFlightData, flightArrivalICAO: e.target.value })
+              }
+            />
+            <br />
+            Kod IATA lotniska docelowego {" "}
+            <input
+              type="text"
+              size="4"
+              name="flightArrivalIATA"
+              onChange={(e) =>
+                setPreFlightData({ ...preFlightData, flightArrivalIATA: e.target.value })
               }
             />
             <br />
