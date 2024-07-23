@@ -32,14 +32,27 @@ const addFlightQuery = (req, res) => {
   const flightDelay = req.body.fliDelay;
   const flightDuration = req.body.flightDuration;
 
-   const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}");`;
-   db.query(SQL, (err, result) => {
+  const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}");`;
+  db.query(SQL, (err, result) => {
     if (err) {
       console.error('error connecting: ' + err.stack);
       return;
     }
     res.send("added");
-   });
+  });
 };
 
-module.exports = { addFlightQuery };
+const getFlightsDurationSum = (req, res) => {
+
+  const SQL = `SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(fli_duration))) AS total_duration FROM flights;`;
+  db.query(SQL, (err, result) => {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return;
+    }
+    res.send(result);
+  });
+};
+
+
+module.exports = { addFlightQuery, getFlightsDurationSum };

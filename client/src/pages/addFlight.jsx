@@ -128,7 +128,7 @@ export default function AddFlight() {
                     }
                   />
                 </div>
-                <div>
+                <div className="">
                   <label
                     class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
                     for="grid-first-name"
