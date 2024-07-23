@@ -21,11 +21,11 @@ const addFlightQuery = (req, res) => {
   const userID = req.body.userID;
   const flightNumber = req.body.flightNumber;
   const flightDeparture = req.body.flightDeparture;
-  console.log(flightDeparture)
+  // console.log(flightDeparture)
   const flightArrival = req.body.flightArrival;
   const flightAirline = req.body.flightAirline;
 
-  const SQL = `INSERT INTO flights (user_id,fli_dep_time_real,fli_arr_real,fli_airline,fli_number) VALUES (${userID}, ${flightDeparture}, ${flightArrival},${flightAirline},${flightNumber});`;
+  const SQL = `INSERT INTO flights (user_id,fli_airline,fli_number) VALUES (${userID},"${flightAirline}","${flightNumber}");`;
   db.query(SQL, (err, result) => {
     if (err) throw err;
     res.json(result);
