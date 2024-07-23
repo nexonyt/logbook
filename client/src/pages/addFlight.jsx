@@ -274,6 +274,7 @@ export default function AddFlight() {
                     })
                   }
                 />
+                {/* kom */}
               </div>
               <div>
                 <label
