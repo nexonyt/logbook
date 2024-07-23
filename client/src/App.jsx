@@ -1,3 +1,4 @@
+import "./index.css";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -18,13 +19,15 @@ function App() {
       <UserContextProvider>
         <Navbar />
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/add-flight" element={<AddFlight />} />
-        </Routes>
+        <div className="flex flex-row justify-center items-center m-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/add-flight" element={<AddFlight />} />
+          </Routes>
+        </div>
       </UserContextProvider>
     </>
   );
