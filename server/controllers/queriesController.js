@@ -44,7 +44,9 @@ const addFlightQuery = (req, res) => {
 
 const getFlightsDurationSum = (req, res) => {
 
-  const SQL = `SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(fli_duration))) AS total_duration FROM flights;`;
+  const userID = req.body.userID
+  console.log(userID)
+  const SQL = `SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(fli_duration))) AS total_duration FROM flights WHERE user_id = ${userID};`;
   db.query(SQL, (err, result) => {
     if (err) {
       console.error('error connecting: ' + err.stack);

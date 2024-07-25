@@ -1,14 +1,24 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom'
 
 export default function Stats() {
     const [flightDurationSum, setFlightDurationSum] = useState(null);
+    const [userID,setUserID] = useState(null)
+    useEffect(() => {
+        if (!userID) {
+          axios.get("/getuserid").then(({ data }) => {
+            setUserID(data);
+          });
+        }
+      }, []);
+
 
     const sendData = () => {
-        axios.get("/getflightdurationsum").then((response) => {
+        const dataToSend = {'userID':userID}
+        axios.post("/getflightdurationsum",dataToSend).then((response) => {
             console.log(response.data[0].total_duration);
             setFlightDurationSum(response.data[0].total_duration);
         });

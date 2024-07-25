@@ -16,5 +16,5 @@ router.post("/register", registerUser);
 router.post('/login',loginUser)
 router.get('/getuserid',getUserID)
 router.post('/addflightquery',addFlightQuery)
-router.get('/getflightdurationsum',getFlightsDurationSum)
+router.post('/getflightdurationsum',getFlightsDurationSum)
 module.exports = router;
