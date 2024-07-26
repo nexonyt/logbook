@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.options('*', cors());
 
 console.log(process.env.DB_HOST);
 
@@ -31,8 +31,10 @@ const addFlightQuery = (req, res) => {
   const fliAircraft = req.body.fliAircraft;
   const flightDelay = req.body.fliDelay;
   const flightDuration = req.body.flightDuration;
+  const fliSeats = req.body.fliSeats;
+  const fliDetails = req.body.fliDetails;
 
-  const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}");`;
+  const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration,notes,fli_seat) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}","${fliDetails}","${fliSeats}");`;
   db.query(SQL, (err, result) => {
     if (err) {
       console.error('error connecting: ' + err.stack);

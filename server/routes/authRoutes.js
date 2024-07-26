@@ -6,8 +6,9 @@ const cors = require("cors");
 
 router.use(
   cors({
-    credentials: true,
-    origin: "http://localhost:5173",
+    credentials: false,
+    // origin: "http://localhost:5173",
+    origin: '*'
   })
 );
 router.get('/profile',getProfile)
