@@ -19,7 +19,8 @@ export default function AddFlight() {
     fliDelay: 0,
     flightDuration: "",
     fliSeats: "",
-    fliDetails:""
+    fliDetails:"",
+    fliAircraftType:""
   });
 
   useEffect(() => {
@@ -57,6 +58,7 @@ export default function AddFlight() {
       fliDelay: preFlightData.fliDelay,
       fliSeats: preFlightData.fliSeats,
       fliDetails: preFlightData.fliDetails,
+      fliAircraftType: preFlightData.fliAircraftType
     };
     console.log(flightData);
     axios.post("/addflightquery", flightData).then((response) => {
@@ -379,18 +381,18 @@ export default function AddFlight() {
 
             </div>
             <div className="w-full flex flex-row justify-center gap-5">
-              <div className="w-full">
+              <div className="">
                 <label
                   class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
-                  Dodatkowe informacje odnośnie lotu
+                  Dodatkowe informacje
                 </label>
                 <input
                   type="text"
                   name="fliAircraft"
                   placeholder="np. Silne turbulencje"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) =>
                     setPreFlightData({
                       ...preFlightData,
@@ -399,6 +401,26 @@ export default function AddFlight() {
                   }
                 />
               </div>
+              <div>
+                  <label
+                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    for="grid-first-name"
+                  >
+                    Typ samolotu
+                  </label>
+                  <input
+                    type="text"
+                    name="fliAircraft"
+                    placeholder="np. Boeing 737-8AS"
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    onChange={(e) =>
+                      setPreFlightData({
+                        ...preFlightData,
+                        fliAircraftType: e.target.value,
+                      })
+                    }
+                  />
+                </div>
             </div>
             {/* <input class="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe"/> */}{" "}
 
