@@ -1,50 +1,84 @@
-import React from "react";
-import { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from 'react-router-dom'
-
 export default function Stats() {
-    const [flightDurationSum, setFlightDurationSum] = useState(null);
-    const [userID,setUserID] = useState(null)
-    useEffect(() => {
-        if (!userID) {
-          axios.get("/getuserid").then(({ data }) => {
-            setUserID(data);
-          });
-        }
-      }, []);
+  const [stats, setStats] = useState(null);
+  const [userID, setUserID] = useState(null);
+  const [show, setShow] = useState(false);
 
-
-    const sendData = () => {
-        const dataToSend = {'userID':userID}
-        axios.post("/getflightdurationsum",dataToSend).then((response) => {
-            console.log(response.data[0].total_duration);
-            setFlightDurationSum(response.data[0].total_duration);
-        });
+  useEffect(() => {
+    // Pobierz userID
+    const fetchUserID = async () => {
+      try {
+        const response = await axios.get("/getuserid");
+        setUserID(response.data);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+        toast.error("Error fetching user ID");
+      }
     };
 
+    fetchUserID();
+  }, []);
 
+  useEffect(() => {
+    // Funkcja do wysyłania danych
+    const sendData = async () => {
+      if (userID) {
+        const dataToSend = { userID };
+        try {
+          const response = await axios.post("/getflightdurationsum", dataToSend);
+          console.log(response.data);
+          setStats(response.data);
+          setShow(true)
 
-    return (
-        <>
-            <p>Staty</p>
-            <button
-                onClick={() => sendData()}
-                className="inline-block my-12 rounded bg-blue-500 text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-blue-600 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0"
-              >
-                Wyślij dane
-              </button>
-              <br/>
+        } catch (error) {
 
-              <br/>
-              <br/>
-              
-              {flightDurationSum && (
-                <div>
-                    <p>Łączny czas lotów: {flightDurationSum}</p>
-                </div>
-            )}
-        </>
-    );
+          console.error("Error sending data:", error);
+          toast.error("Error sending data");
+
+        }
+      }
+    };
+
+    sendData();
+  }, [userID]); // Wywołaj sendData, gdy userID się zmieni
+
+  return (
+    <div className="flex flex-col justify-center items-center ">
+      <p>Staty</p>
+      <br />
+      <br />
+      <br />
+      {show ? (
+        <div className="animate-in fade-in duration-700 ">
+          <div className="flex flex-col justify-center gap-2 items-center ">
+            <p className=""><b>Łączna czas wszystkich lotów:</b> {stats.sum_time_of_flights[0].total_duration}</p>
+            <p><b>Najdłuższy odbyty lot:</b> {stats.longest_flight[0].max_duration}</p>
+            <p><b>Największe opóźnienie:</b> {stats.max_delay[0].fli_arr_air_iata}</p>
+            <p><b>Najbardziej punktualna linia lotnicza:</b> {stats.least_delay_airline[0].fli_airline} ({stats.least_delay_airline[0].avg_delay} razy)</p>
+            <p><b>Najchętniej wybierana linia lotnicza:</b> {stats.most_chosen_airline[0].fli_airline} ({stats.most_chosen_airline[0].count} razy)</p>
+            <p><b>Najczęstsze lotnisko wylotu:</b> {stats.most_frequent_departure_airport[0].count} ({stats.most_frequent_departure_airport[0].fli_dest_air_icao})</p>
+            <p><b>Najczęstszy kierunek lotu:</b> {stats.most_frequent_destination[0].count} ({stats.most_frequent_destination[0].fli_arr_air_icao})</p>
+          </div>
+        </div>
+      ) : 
+      <div className="animate-out fade-out duration-300 delay-200">
+      <div className="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
+        <svg class="w-16 h-16 animate-spin text-gray-900/50" viewBox="0 0 64 64" fill="none"
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+          <path
+            d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
+            stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path
+            d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
+            stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+          </path>
+        </svg>
+      </div>
+      </div>
+      }
+    </div>
+  );
 }
