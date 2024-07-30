@@ -286,12 +286,21 @@ export default function AddFlight() {
                 <input
                   type="text"
                   name="fliDelay"
+                  placeholder="e.g. 2:45"
+                  example="0:00"
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  onChange={(e) =>
-                    setPreFlightData({
-                      ...preFlightData,
-                      fliDelay: e.target.value,
-                    })
+                  onChange={(e) => {
+                    const regex = /^(\d:\d\d|\d\d:\d\d|\d\d \d:\d\d|\d \d:\d\d)$/;
+                    if(regex.test(e.target.value)) {
+                      setPreFlightData({
+                        ...preFlightData,
+                        fliDelay: e.target.value,
+                      })
+                    }
+                    else {
+                      console.log("bład")
+                    }
+                  }
                   }
                 />
               </div>
