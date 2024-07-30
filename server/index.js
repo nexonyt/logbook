@@ -10,6 +10,10 @@ mongoose
   .catch((err) => console.log("Not connected", err));
 
 app.use(express.json());
+app.use(cors({
+  origin: '*', // Pozwala na połączenia z dowolnej domeny
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}))
 const port = 8000;

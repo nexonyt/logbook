@@ -12,8 +12,9 @@ import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "../context/userContext";
 
+// axios.defaults.baseURL = "https://api.nexonstudio.pl";
 axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 function App() {
   return (
     <>

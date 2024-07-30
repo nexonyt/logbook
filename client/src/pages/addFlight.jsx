@@ -18,6 +18,9 @@ export default function AddFlight() {
     fliAircraft: "",
     fliDelay: 0,
     flightDuration: "",
+    fliSeats: "",
+    fliDetails:"",
+    fliAircraftType:""
   });
 
   useEffect(() => {
@@ -51,8 +54,11 @@ export default function AddFlight() {
       flightArrivalIATA: preFlightData.flightArrivalIATA,
       flightArrivalICAO: preFlightData.flightArrivalICAO,
       fliAircraft: preFlightData.fliAircraft,
-      fliDelay: preFlightData.fliDelay,
       flightDuration: preFlightData.flightDuration,
+      fliDelay: preFlightData.fliDelay,
+      fliSeats: preFlightData.fliSeats,
+      fliDetails: preFlightData.fliDetails,
+      fliAircraftType: preFlightData.fliAircraftType
     };
     console.log(flightData);
     axios.post("/addflightquery", flightData).then((response) => {
@@ -67,26 +73,55 @@ export default function AddFlight() {
         <div>
           <div>Dodaj lot dla usera o id: {user}!</div>
           <div className="flex flex-col justify-center items-center m-12">
-          <label
+            <div className="flex flex-row gap-5">
+              <div name="DepartureAirport" className="flex">
+                <div>
+                  <label
                     class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Numer lotu
                   </label>
-            <input
-              type="text"
-              name="flightNumber"
-              placeholder="FR 5792"
-              className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              value={preFlightData.flightNumber}
-              onChange={(e) =>
-                setPreFlightData({
-                  ...preFlightData,
-                  flightNumber: e.target.value,
-                })
-              }
-            />
-            {/* Dane odnośnie godziny i daty */}
+                  <input
+                    type="text"
+                    name="flightNumber"
+                    placeholder="FR 5792"
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    value={preFlightData.flightNumber}
+                    onChange={(e) =>
+                      setPreFlightData({
+                        ...preFlightData,
+                        flightNumber: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+              </div>
+              {/* Dane odnośnie godziny i daty */}
+              <div>
+                <div>
+                  <label
+                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    for="grid-first-name"
+                  >
+                    Linia lotnicza
+                  </label>
+                  <input
+                    type="text"
+                    name="flightAirline"
+                    placeholder="np. Enter Air"
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    onChange={(e) =>
+                      setPreFlightData({
+                        ...preFlightData,
+                        flightAirline: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
             <div className="my-12">
               <div name="DepartureAirport" className="flex flex-row gap-5">
                 <div>
@@ -212,7 +247,7 @@ export default function AddFlight() {
                 />
               </div>
             </div>
-            <div name="DepartureAirport" className="flex flex-row gap-5 my-6">
+            <div name="DepartureAirport" className="flex flex-row gap-5 mb-10">
               <div>
                 <label
                   class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
@@ -286,8 +321,6 @@ export default function AddFlight() {
                 <input
                   type="text"
                   name="fliDelay"
-                  placeholder="e.g. 2:45"
-                  example="0:00"
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) => {
                     const regex = /^(\d:\d\d|\d\d:\d\d|\d\d \d:\d\d|\d \d:\d\d)$/;
@@ -306,24 +339,26 @@ export default function AddFlight() {
               </div>
             </div>
             {/* Dane odnośnie samolotu i linii  */}
-            <div className="my-12">
+
+
+            <div className="mb-12 mt-4">
               <div name="AircraftDetails" className="flex flex-row gap-5">
                 <div>
                   <label
                     class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
-                    Linia lotnicza
+                    Numer miejsca
                   </label>
                   <input
                     type="text"
                     name="flightAirline"
-                    placeholder="np. Enter Air"
+                    placeholder="np. 7A"
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) =>
                       setPreFlightData({
                         ...preFlightData,
-                        flightAirline: e.target.value,
+                        fliSeats: e.target.value,
                       })
                     }
                   />
@@ -349,9 +384,52 @@ export default function AddFlight() {
                   />
                 </div>
               </div>
+
+            </div>
+            <div className="w-full flex flex-row justify-center gap-5">
+              <div className="">
+                <label
+                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  for="grid-first-name"
+                >
+                  Dodatkowe informacje
+                </label>
+                <input
+                  type="text"
+                  name="fliAircraft"
+                  placeholder="np. Silne turbulencje"
+                  className="appearance-none block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  onChange={(e) =>
+                    setPreFlightData({
+                      ...preFlightData,
+                      fliDetails: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                  <label
+                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    for="grid-first-name"
+                  >
+                    Typ samolotu
+                  </label>
+                  <input
+                    type="text"
+                    name="fliAircraft"
+                    placeholder="np. Boeing 737-8AS"
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    onChange={(e) =>
+                      setPreFlightData({
+                        ...preFlightData,
+                        fliAircraftType: e.target.value,
+                      })
+                    }
+                  />
+                </div>
             </div>
             {/* <input class="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe"/> */}{" "}
-            
+
             <div className="flex justify-center items-center">
               <button
                 onClick={() => sendData()}
