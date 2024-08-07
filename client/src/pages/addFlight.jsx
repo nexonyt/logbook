@@ -1,8 +1,29 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+
 export default function AddFlight() {
   const [user, setUser] = useState(null);
   const [dataReceived, setDataReceived] = useState(false);
+  const initialPreFlightData = {
+    userID: 0,
+    flightNumber: "",
+    flightDateDeparture: "",
+    flightTimeDeparture: "",
+    flightDateArrival: "",
+    flightTimeArrival: "",
+    flightAirline: "",
+    flightDestIATA: "",
+    flightDestICAO: "",
+    flightArrivalIATA: "",
+    flightArrivalICAO: "",
+    fliAircraft: "",
+    fliDelay: "",
+    flightDuration: "",
+    fliSeats: "",
+    fliDetails: "",
+    fliAircraftType: ""
+  };
   const [preFlightData, setPreFlightData] = useState({
     userID: 0,
     flightNumber: "",
@@ -16,11 +37,11 @@ export default function AddFlight() {
     flightArrivalIATA: "",
     flightArrivalICAO: "",
     fliAircraft: "",
-    fliDelay: 0,
+    fliDelay: "",
     flightDuration: "",
     fliSeats: "",
-    fliDetails:"",
-    fliAircraftType:""
+    fliDetails: "",
+    fliAircraftType: ""
   });
 
   useEffect(() => {
@@ -60,19 +81,25 @@ export default function AddFlight() {
       fliDetails: preFlightData.fliDetails,
       fliAircraftType: preFlightData.fliAircraftType
     };
-    console.log(flightData);
     axios.post("/addflightquery", flightData).then((response) => {
-      console.log(response.data);
-    });
+      if (response.status = 200) {
+        toast.success('Dane zostały pomyślnie zapisane!')
+
+        setPreFlightData(initialPreFlightData)
+      }
+    }).catch((err) => {
+      toast.error(err.response.data)
+
+    })
   };
   return (
     <>
       {dataReceived == false ? (
         <div></div>
       ) : (
-        <div>
+        <div className="">
           <div>Dodaj lot dla usera o id: {user}!</div>
-          <div className="flex flex-col justify-center items-center m-12">
+          <div className="flex flex-col justify-center items-center">
             <div className="flex flex-row gap-5">
               <div name="DepartureAirport" className="flex">
                 <div>
@@ -111,7 +138,8 @@ export default function AddFlight() {
                     type="text"
                     name="flightAirline"
                     placeholder="np. Enter Air"
-                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    value={preFlightData.flightAirline}
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 xs:w-24"
                     onChange={(e) =>
                       setPreFlightData({
                         ...preFlightData,
@@ -134,6 +162,7 @@ export default function AddFlight() {
                   <input
                     type="text"
                     name="flightDateDeparture"
+                    value={preFlightData.flightDateDeparture}
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="e.g. 2024-10-04"
                     onChange={(e) =>
@@ -153,6 +182,7 @@ export default function AddFlight() {
                   <input
                     type="text"
                     name="flightTimeDeparture"
+                    value={preFlightData.flightTimeDeparture}
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="e.g. 10:00"
                     onChange={(e) =>
@@ -173,6 +203,7 @@ export default function AddFlight() {
                   <input
                     type="text"
                     name="flightDateArrival"
+                    value={preFlightData.flightDateArrival}
                     placeholder="e.g. 2024-10-10"
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) =>
@@ -194,6 +225,7 @@ export default function AddFlight() {
                     name="flightTimeArrival"
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="e.g. 14:00"
+                    value={preFlightData.flightTimeArrival}
                     onChange={(e) =>
                       setPreFlightData({
                         ...preFlightData,
@@ -214,6 +246,7 @@ export default function AddFlight() {
                 </label>
                 <input
                   type="text"
+                  value={preFlightData.flightDestICAO}
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   name="flightDestICAO"
                   placeholder="ICAO"
@@ -235,6 +268,7 @@ export default function AddFlight() {
                 </label>
                 <input
                   type="text"
+                  value={preFlightData.flightDestIATA}
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   name="flightDestIATA"
                   placeholder="IATA"
@@ -259,6 +293,7 @@ export default function AddFlight() {
                   type="text"
                   placeholder="ICAO"
                   name="flightArrivalICAO"
+                  value={preFlightData.flightArrivalICAO}
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) =>
                     setPreFlightData({
@@ -279,6 +314,7 @@ export default function AddFlight() {
                   type="text"
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   name="flightArrivalIATA"
+                  value={preFlightData.flightArrivalIATA}
                   placeholder="IATA"
                   onChange={(e) =>
                     setPreFlightData({
@@ -300,6 +336,7 @@ export default function AddFlight() {
                 <input
                   type="text"
                   name="flightDuration"
+                  value={preFlightData.flightDuration}
                   placeholder="e.g. 2:45"
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) =>
@@ -321,6 +358,7 @@ export default function AddFlight() {
                 <input
                   type="text"
                   name="fliDelay"
+                  value={preFlightData.fliDelay}
                   placeholder="np. 1:45"
                   className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) =>
@@ -347,6 +385,7 @@ export default function AddFlight() {
                   <input
                     type="text"
                     name="flightAirline"
+                    value={preFlightData.fliSeats}
                     placeholder="np. 7A"
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) =>
@@ -367,6 +406,7 @@ export default function AddFlight() {
                   <input
                     type="text"
                     name="fliAircraft"
+                    value={preFlightData.fliAircraft}
                     placeholder="np. SP-EXA"
                     className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) =>
@@ -391,6 +431,7 @@ export default function AddFlight() {
                 <input
                   type="text"
                   name="fliAircraft"
+                  value={preFlightData.fliDetails}
                   placeholder="np. Silne turbulencje"
                   className="appearance-none block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={(e) =>
@@ -402,25 +443,26 @@ export default function AddFlight() {
                 />
               </div>
               <div>
-                  <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
-                    for="grid-first-name"
-                  >
-                    Typ samolotu
-                  </label>
-                  <input
-                    type="text"
-                    name="fliAircraft"
-                    placeholder="np. Boeing 737-8AS"
-                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    onChange={(e) =>
-                      setPreFlightData({
-                        ...preFlightData,
-                        fliAircraftType: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                <label
+                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  for="grid-first-name"
+                >
+                  Typ samolotu
+                </label>
+                <input
+                  type="text"
+                  name="fliAircraft"
+                  value={preFlightData.fliAircraftType}
+                  placeholder="np. Boeing 737-8AS"
+                  className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  onChange={(e) =>
+                    setPreFlightData({
+                      ...preFlightData,
+                      fliAircraftType: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             {/* <input class="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe"/> */}{" "}
 
