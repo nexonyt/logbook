@@ -6,17 +6,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    theme: {
-      extend: {
-        screens: {
-          'xs': '500px', // niestandardowy punkt przerwania
-        },
+    extend: {
+      screens: {
+        'xs': '500px', // niestandardowy punkt przerwania
+      },
+      colors: {
+        'myblack': '#181818',
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
   darkMode: 'class',
-  theme: {
-    extend: {}
-  }
 }

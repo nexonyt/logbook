@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
-<nav className="flex flex-row justify-center items-center gap-20 m-5">
+<nav className="flex flex-col items-center gap-6 py-24 w-44  h-dvh bg-[#131218]	">
     <Link to='/'>Home</Link>
     <Link to='/register'>Register</Link>
     <Link to='/login'>Login</Link>

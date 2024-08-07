@@ -97,14 +97,14 @@ export default function AddFlight() {
       {dataReceived == false ? (
         <div></div>
       ) : (
-        <div className="">
+        <div className="animate-in fade-in duration-700 ">
           <div>Dodaj lot dla usera o id: {user}!</div>
-          <div className="flex flex-col justify-center items-center">
+          <div>
             <div className="flex flex-row gap-5">
-              <div name="DepartureAirport" className="flex">
+              <div name="DepartureAirport" className="flex justify-center items-center">
                 <div>
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Numer lotu
@@ -129,7 +129,7 @@ export default function AddFlight() {
               <div>
                 <div>
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Linia lotnicza
@@ -139,7 +139,7 @@ export default function AddFlight() {
                     name="flightAirline"
                     placeholder="np. Enter Air"
                     value={preFlightData.flightAirline}
-                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 xs:w-24"
+                    className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) =>
                       setPreFlightData({
                         ...preFlightData,
@@ -154,7 +154,7 @@ export default function AddFlight() {
               <div name="DepartureAirport" className="flex flex-row gap-5">
                 <div>
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Data odlotu
@@ -174,7 +174,7 @@ export default function AddFlight() {
                   />
 
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Godzina odlotu
@@ -195,7 +195,7 @@ export default function AddFlight() {
                 </div>
                 <div className="">
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Data przylotu
@@ -215,7 +215,7 @@ export default function AddFlight() {
                   />
 
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Godzina przylotu
@@ -239,7 +239,7 @@ export default function AddFlight() {
             <div name="DepartureAirport" className="flex flex-row gap-5">
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Kod ICAO lotniska odlotu
@@ -261,7 +261,7 @@ export default function AddFlight() {
 
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Kod IATA lotniska odlotu
@@ -284,7 +284,7 @@ export default function AddFlight() {
             <div name="DepartureAirport" className="flex flex-row gap-5 mb-10">
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Kod ICAO lotniska docelowego
@@ -305,7 +305,7 @@ export default function AddFlight() {
               </div>
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Kod IATA lotniska docelowego
@@ -328,7 +328,7 @@ export default function AddFlight() {
             <div name="AircraftDetails" className="flex flex-row gap-5">
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Czas lotu{" "}
@@ -350,7 +350,7 @@ export default function AddFlight() {
               </div>
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218] text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Jakie opóźnienie?
@@ -360,13 +360,15 @@ export default function AddFlight() {
                   name="fliDelay"
                   value={preFlightData.fliDelay}
                   placeholder="np. 1:45"
-                  className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  onChange={(e) =>
-                    setPreFlightData({
-                      ...preFlightData,
-                      fliDelay: e.target.value,
-                    })
-                  }
+                  className="appearance-none block w-34 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tightfocus:outline-none focus:bg-white focus:border-gray-500"
+                  onChange={(e) => {
+                  setPreFlightData({
+                    ...preFlightData,
+                    fliDelay: e.target.value,
+                  })
+                }
+                  
+                }
                 />
               </div>
             </div>
@@ -377,7 +379,7 @@ export default function AddFlight() {
               <div name="AircraftDetails" className="flex flex-row gap-5">
                 <div>
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Numer miejsca
@@ -398,7 +400,7 @@ export default function AddFlight() {
                 </div>
                 <div>
                   <label
-                    class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                    class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                     for="grid-first-name"
                   >
                     Rejestracja samolotu
@@ -423,7 +425,7 @@ export default function AddFlight() {
             <div className="w-full flex flex-row justify-center gap-5">
               <div className="">
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Dodatkowe informacje
@@ -444,7 +446,7 @@ export default function AddFlight() {
               </div>
               <div>
                 <label
-                  class="block uppercase tracking-wide text-white text-xs font-bold mb-1"
+                  class="block uppercase tracking-wide text-[#131218]	 text-xs font-bold mb-1"
                   for="grid-first-name"
                 >
                   Typ samolotu
@@ -469,7 +471,7 @@ export default function AddFlight() {
             <div className="flex justify-center items-center">
               <button
                 onClick={() => sendData()}
-                className="inline-block my-12 rounded bg-blue-500 text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-blue-600 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0"
+                className="inline-block my-12 rounded bg-[#181818] text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-[#525252] hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0"
               >
                 Wyślij dane
               </button>
