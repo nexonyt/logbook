@@ -47,6 +47,22 @@ const addFlightQuery = (req, res) => {
 };
 
 
+const getAllFlights = (req,res) => {
+  const userID = req.body.userID;
+  const getAllFlightsSQL = `select fli_dest_air_icao,fli_dest_air_iata,fli_arr_air_icao,fli_arr_air_iata,fli_dep_time,fli_arr_time,fli_airline,fli_aircraft,fli_number,fli_duration,notes,fli_seat,fli_delay,fli_aircraft_type from flights where user_id = ${userID};`
+
+  db.query(getAllFlightsSQL, (err, result) => {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      res.status(500).send('Error retrieving flight data');
+      return;
+    }
+    else {
+      res.send(result)
+    }
+  });
+}
+
 
 const getFlightsDurationSum = (req, res) => {
   const userID = req.body.userID;
@@ -192,4 +208,4 @@ LIMIT 1;
 };
 
 
-module.exports = { addFlightQuery, getFlightsDurationSum };
+module.exports = { addFlightQuery, getFlightsDurationSum,getAllFlights };

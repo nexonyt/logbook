@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { test, registerUser,loginUser,getProfile,getUserID } = require("../controllers/authController");
-const { addFlightQuery,getFlightsDurationSum } = require("../controllers/queriesController");
+const { addFlightQuery,getFlightsDurationSum,getAllFlights } = require("../controllers/queriesController");
 const cors = require("cors");
 
 router.use(
@@ -18,4 +18,5 @@ router.post('/login',loginUser)
 router.get('/getuserid',getUserID)
 router.post('/addflightquery',addFlightQuery)
 router.post('/getflightdurationsum',getFlightsDurationSum)
+router.post('/getAllFlights',getAllFlights);
 module.exports = router;
