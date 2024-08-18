@@ -32,10 +32,8 @@ export default function Stats() {
           setShow(true)
           setStats(response.data)
         } catch (error) {
-
           console.error("Error sending data:", error);
           toast.error("Error sending data");
-
         }
       }
     };
