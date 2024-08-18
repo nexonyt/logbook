@@ -9,6 +9,8 @@ export default function Stats() {
 
   useEffect(() => {
     // Pobierz userID
+
+    
     const fetchUserID = async () => {
       try {
         const response = await axios.get("/getuserid");

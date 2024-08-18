@@ -3,20 +3,33 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import {useNavigate} from 'react-router-dom'
+import FlightDetails from "../components/FlightDetails";
 
 export default function MyFlights() {
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Miesiące są 0-indeksowane
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Miesiące są 0-indeksowane
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 };
 
+const [actualRow, setActualRow] = useState(0);
+const [openStatus, setOpenStatus] = useState(false);
+
+const handleDetails = (index) => {
+  setActualRow(index);
+  if (actualRow == index) {
+    setOpenStatus(!openStatus);
+    setActualRow(index);
+  } else {
+    setOpenStatus(!openStatus);
+  }
+};
 
 const [flights, setFlights] = useState(null);
   const [userID, setUserID] = useState(null);
@@ -26,11 +39,10 @@ const [flights, setFlights] = useState(null);
     // Pobierz userID
     const fetchUserID = async () => {
       try {
-        const response = await axios.get("/getuserid");
+        const response = await axios.get("/getuserid",{timeout: 5000});
         setUserID(response.data);
       } catch (error) {
         console.error("Error fetching user ID:", error);
-        toast.error("Error fetching user ID");
       }
     };
 
@@ -43,15 +55,19 @@ const [flights, setFlights] = useState(null);
       if (userID) {
         const dataToSend = { userID };
         try {
-          const response = await axios.post("/getAllFlights", dataToSend);
-          setShow(true)
-          setFlights(response.data)
+          const response = await axios.post("/getAllFlights", dataToSend, { timeout: 5000 });
+          setShow(true);
+          setFlights(response.data);
         } catch (error) {
-
           console.error("Error sending data:", error);
-          toast.error("Error sending data");
-
+        
+          if (error.code === 'ECONNABORTED') {
+            toast.error("Przekroczono czas oczekiwania na odpowiedź od serwera.");
+          } else {
+            toast.error("Błąd podczas pobierania danych.");
+          }
         }
+        
       }
     };
 
@@ -60,7 +76,7 @@ const [flights, setFlights] = useState(null);
     return (
       <>
         <div className="flex flex-col justify-center items-center w-full animate-in fade-in duration-700">
-          <div className="text-[#131218] font-bold m-8">Moje loty</div>
+          <div className="text-[#131218] font-bold m-4 text-lg	">Lista odbytych lotów</div>
           {show ? (
             <div className="animate-in fade-in duration-700 text-[#131218] w-full p-4">
               <table className="w-full table-auto">
@@ -76,7 +92,7 @@ const [flights, setFlights] = useState(null);
                 {flights.map((data, index) => (
                   <tbody>
                     <tr key={index} className={"row" + index}>
-                    <td className="bg-grey-light border-b-2 border-grey-light p-4 text-center">
+                      <td className="bg-grey-light border-b-2 border-grey-light p-4 text-center">
                         {formatDate(data.fli_dep_time)}
                       </td>
                       <td className="bg-grey-light border-b-2 border-grey-light p-4 text-center">
@@ -99,13 +115,22 @@ const [flights, setFlights] = useState(null);
 
                       <td className="bg-grey-light border-b-2 border-grey-light p-4 text-center">
                         <button
-                          className="h-8 w-32 mx-2 bg-green-500 text-white rounded-md"
-                          //onClick={() => handleDetails(index)}
+                          className="h-8 w-32 mx-2 bg-[#342e37] text-white rounded-md"
+                          onClick={() => handleDetails(index)}
                         >
                           Szczegóły lotu
                         </button>
                       </td>
                     </tr>
+                    {actualRow == index && openStatus == true ? (
+                      <tr> 
+                        <td colSpan={7}>
+                          <FlightDetails key={index} details={data} />
+                        </td>{" "}
+                      </tr>
+                    ) : (
+                      ""
+                    )}
                   </tbody>
                 ))}
               </table>
