@@ -23,7 +23,6 @@ const addFlightQuery = (req, res) => {
   const userID = req.body.userID;
   const flightNumber = req.body.flightNumber;
   const flightDeparture = req.body.flightDeparture;
-  // console.log(flightDeparture)
   const flightArrival = req.body.flightArrival;
   const flightAirline = req.body.flightAirline;
   const flightDestIATA = req.body.flightDestIATA;
@@ -35,22 +34,47 @@ const addFlightQuery = (req, res) => {
   const flightDuration = req.body.flightDuration;
   const fliSeats = req.body.fliSeats;
   const fliDetails = req.body.fliDetails;
+  const fliAircraftType = req.body.fliAircraftType;
 
-  const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration,notes,fli_seat) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}","${fliDetails}","${fliSeats}");`;
+  const SQL = `INSERT INTO flights (user_id,fli_dep_time,fli_arr_time,fli_airline,fli_number,fli_dest_air_iata,fli_dest_air_icao,fli_arr_air_iata,fli_arr_air_icao,fli_aircraft,fli_delay,fli_duration,notes,fli_seat,fli_aircraft_type) VALUES (${userID}, "${flightDeparture}", "${flightArrival}","${flightAirline}","${flightNumber}","${flightDestIATA}","${flightDestICAO}","${flightArrivalIATA}","${flightArrivalICAO}","${fliAircraft}","${flightDelay}","${flightDuration}","${fliDetails}","${fliSeats}","${fliAircraftType}");`;
   db.query(SQL, (err, result) => {
     if (err) {
       console.error('error connecting: ' + err.stack);
-      return;
+      res.status(409).send('Wystąpił problem z połączeniem z bazą danych');
     }
-    res.send("added");
+    else res.send("added");
   });
 };
 
 
+const getAllFlights = (req,res) => {
+  const userID = req.body.userID;
+  const getAllFlightsSQL = `select fli_dest_air_icao,fli_dest_air_iata,fli_arr_air_icao,fli_arr_air_iata,fli_dep_time,fli_arr_time,fli_airline,fli_aircraft,fli_number,fli_duration,notes,fli_seat,fli_delay,fli_aircraft_type from flights where user_id = ${userID} order by fli_dep_time DESC;`
+
+  db.query(getAllFlightsSQL, (err, result) => {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      res.status(500).send('Error retrieving flight data');
+      return;
+    }
+    else {
+      res.send(result)
+    }
+  });
+}
+
 
 const getFlightsDurationSum = (req, res) => {
   const userID = req.body.userID;
-  console.log(userID);
+
+  db.query(`INSERT INTO nexonstu_master_db.visited (application,date,url,additional) VALUES ('logbook',NOW(),'https://flights.nexonstudio.pl/flights','${userID}');`, (err, result) => {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      res.status(500).send('Error retrieving flight data');
+      return;
+    }
+  });
+
 
   const sumTimeOfFlights = `SELECT CONCAT(FLOOR(SUM(TIME_TO_SEC(fli_duration)) / 3600), 'h ', MOD(FLOOR(SUM(TIME_TO_SEC(fli_duration)) / 60), 60), 'm') AS total_duration FROM flights WHERE user_id = ${userID};`
   const longestFlightSQL = `SELECT DATE_FORMAT(SEC_TO_TIME(MAX(TIME_TO_SEC(fli_duration))), '%H:%i') AS max_duration FROM flights WHERE user_id = ${userID};`;
@@ -66,7 +90,7 @@ const getFlightsDurationSum = (req, res) => {
   LIMIT 1;
 `;
 
-const mostFrequentDepartureAirportSQL = `
+  const mostFrequentDepartureAirportSQL = `
 SELECT fli_dest_air_icao,fli_dest_air_iata  AS count 
 FROM flights 
 WHERE user_id = ${userID} 
@@ -75,7 +99,7 @@ ORDER BY count DESC
 LIMIT 1;
 `;
 
-const mostFrequentDestinationAirportSQL = `
+  const mostFrequentDestinationAirportSQL = `
 SELECT fli_arr_air_icao,fli_arr_air_iata  AS count 
 FROM flights 
 WHERE user_id = ${userID} 
@@ -84,7 +108,7 @@ ORDER BY count DESC
 LIMIT 1;
 `;
 
-const airlineWithLeastDelaySQL = `
+  const airlineWithLeastDelaySQL = `
 SELECT fli_airline, AVG(fli_delay) AS avg_delay 
 FROM flights 
 WHERE user_id = ${userID} 
@@ -92,8 +116,11 @@ GROUP BY fli_airline
 ORDER BY avg_delay ASC 
 LIMIT 1;
 `;
+
+  const mostFlightAircraft = `select fli_aircraft AS "aircraft",count(*) AS "number_of_flights"  from flights WHERE user_id = ${userID} GROUP BY fli_aircraft ORDER BY count(*) DESC LIMIT 1;`;
+
   let responsesFromDB = {};
-  let queriesRemaining = 7; // Number of queries
+  let queriesRemaining = 8; // Number of queries
 
   const onQueryComplete = () => {
     queriesRemaining--;
@@ -165,6 +192,16 @@ LIMIT 1;
     onQueryComplete();
   });
 
+  db.query(mostFlightAircraft, (err, result) => {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      res.status(500).send('Error retrieving flight data');
+      return;
+    }
+    responsesFromDB["most_flight_aircraft"] = result ? result : null;
+    onQueryComplete();
+  });
+
   db.query(sumTimeOfFlights, (err, result) => {
     if (err) {
       console.error('error connecting: ' + err.stack);
@@ -174,8 +211,9 @@ LIMIT 1;
     responsesFromDB["sum_time_of_flights"] = result ? result : null;
     onQueryComplete();
   });
+
+
 };
 
 
-
-module.exports = { addFlightQuery, getFlightsDurationSum };
+module.exports = { addFlightQuery, getFlightsDurationSum,getAllFlights };
